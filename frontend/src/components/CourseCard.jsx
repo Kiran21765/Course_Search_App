@@ -6,8 +6,8 @@ const MODE_LABEL = { ONLINE: 'Online', OFFLINE: 'Offline', HYBRID: 'Hybrid' };
 
 export default function CourseCard({ course, query, canEdit, confirming, onEdit, onAskDelete, onCancelDelete, onDelete }) {
   const paid = course.type === 'PAID';
-  const applyLink = safeUrl(course.websiteUrl);
-  const companyLink = safeUrl(course.providerWebsite);
+  // The course's own link wins. Otherwise the provider's company website is used.
+  const website = safeUrl(course.websiteUrl) || safeUrl(course.providerWebsite);
   const skills = course.skills ? course.skills.split(',') : [];
   const months = course.durationMonths;
   const closed = Boolean(course.applyBy) && course.applyBy < todayIso(); // both are YYYY-MM-DD
@@ -91,28 +91,13 @@ export default function CourseCard({ course, query, canEdit, confirming, onEdit,
         <span className={`apply-by${closed ? ' is-closed' : ''}`}>
           {course.applyBy ? `${closed ? 'Closed on' : 'Apply by'} ${course.applyBy}` : ''}
         </span>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-          {applyLink && !closed && (
-            <a className="btn btn-outline" href={applyLink} target="_blank" rel="noopener noreferrer">
-              Apply Now <ExternalIcon size={16} />
-            </a>
-          )}
-
-          {companyLink && (
-            <a className="btn btn-quiet" href={companyLink} target="_blank" rel="noopener noreferrer" title={companyLink}>
-              Visit Website <ExternalIcon size={16} />
-            </a>
-          )}
-
-          {!applyLink && !companyLink && (
-            <span className="muted small">No link listed</span>
-          )}
-
-          {applyLink && closed && (
-            <span className="muted small">Applications closed</span>
-          )}
-        </div>
+        {website && !closed ? (
+          <a className="btn btn-outline" href={website} target="_blank" rel="noopener noreferrer">
+            Apply Now <ExternalIcon size={16} />
+          </a>
+        ) : (
+          <span className="muted small">{closed ? 'Applications closed' : 'No website listed'}</span>
+        )}
       </div>
 
       {canEdit && (
