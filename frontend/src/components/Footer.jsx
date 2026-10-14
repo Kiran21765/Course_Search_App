@@ -28,8 +28,10 @@ export default function Footer() {
         <section id="contact" className="footer-col">
           <h3>Contact</h3>
           <ul>
-            <li><a href="mailto:support@coursehub.example">support@coursehub.example</a></li>
-            <li>Monday to Friday, 9:00 to 18:00</li>
+         <li>Any Quires Contact Us</li>
+                     <li><a href="mailto:alexanderkumark954@gmail.com">support@coursehub.example</a></li>
+                     <li>Find your Carrier Best</li>
+                     <li>Best Wishes From Team CourseHub</li>
           </ul>
         </section>
       </div>
